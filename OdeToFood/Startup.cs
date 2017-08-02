@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +21,7 @@ namespace OdeToFood
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc();
             services.AddSingleton(Configuration);
             services.AddSingleton<IGreeter, Greeter>();
         }
@@ -32,12 +34,15 @@ namespace OdeToFood
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.Run(async (context) =>
+            else
             {
-                var message = greeter.GetGreeting();
-                await context.Response.WriteAsync(message);
-            });
+                app.UseExceptionHandler(new ExceptionHandlerOptions
+                {
+                    ExceptionHandler = context => context.Response.WriteAsync("Oops!")
+                });
+            }
+            app.UseFileServer();
+            app.UseMvcWithDefaultRoute();
         }
     }
 }
