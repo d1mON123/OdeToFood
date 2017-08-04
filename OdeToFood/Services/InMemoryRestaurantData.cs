@@ -46,5 +46,10 @@ namespace OdeToFood.Services
             Restaurants.Add(newRestaurant);
             return newRestaurant;
         }
+
+        public void Commit()
+        {
+            //nothing
+        }
     }
 }
