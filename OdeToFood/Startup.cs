@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -30,6 +31,7 @@ namespace OdeToFood
             services.AddScoped<IRestaurantData, SqlRestaurantData>();
             services.AddDbContext<OdeToFoodDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("OdeToFood")));
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<OdeToFoodDbContext>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IGreeter greeter)
@@ -48,6 +50,7 @@ namespace OdeToFood
                 });
             }
             app.UseFileServer();
+            app.UseIdentity();
             app.UseMvc(ConfigureRoutes);
             app.Run(ctx => ctx.Response.WriteAsync("Not found"));
         }
