@@ -50,9 +50,9 @@ namespace OdeToFood
                 });
             }
             app.UseFileServer();
+            app.UseNodeModules(env.ContentRootPath);
             app.UseIdentity();
             app.UseMvc(ConfigureRoutes);
-            app.Run(ctx => ctx.Response.WriteAsync("Not found"));
         }
 
         private static void ConfigureRoutes(IRouteBuilder routeBuilder)
